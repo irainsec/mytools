@@ -158,7 +158,11 @@ def main():
         elif choice == '2':
             start_Socat_listener()
         elif choice == '3':
-            print("Exiting...")
+            message1 = ("Exiting.................")
+            messagespace1 = ("")
+            print()
+            cowsay(message1, messagespace1)
+            print()
             break
         else:
             message1 = ("________________Are you dumb bruh? Can't you see the available option?________________")
