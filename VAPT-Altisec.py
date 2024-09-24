@@ -108,7 +108,6 @@ def start_meterpreter_listener():
     except FileNotFoundError:
         print("msfconsole is not installed or not found in PATH. Please ensure Metasploit is installed.")
 
-
 def start_Socat_listener():
     try:
         # Run Socat commands with the provided options
