@@ -2,6 +2,8 @@ import os
 import subprocess
 import time
 
+# ---------------------------------------fade banner----------------------------------------
+
 def create_gradient_colors(start_color, end_color, steps):
     """Create a list of colors transitioning from start_color to end_color."""
     colors = []
@@ -44,6 +46,8 @@ def print_fade_banner():
 
     print()  # Add space below the banner
 
+# ---------------------------------------rainbow banner----------------------------------------
+
 def print_rainbow_banner():
     rainbow_colors = [
         (255, 0, 0),    # Red
@@ -73,6 +77,56 @@ def print_rainbow_banner():
         r, g, b = rainbow_colors[i % len(rainbow_colors)]  # Loop colors
         padding = (terminal_width - len(line)) // 2
         print(' ' * padding + f"\033[38;2;{r};{g};{b}m{line}\033[0m")
+
+# ---------------------------------------cowsay error message----------------------------------------
+
+def cowsay(messagespace0, message1, messagespace1, message2, message3, message4, message5, message6, message7, message8, message9, message10, message11, message12, message13, message14, message15, message16, message17, messagespace2):
+    # Create the cow ASCII art
+    cow_art = r"""
+         \   ^__^
+          \  (oo)\_______
+             (__)\       )\/\
+                 ||----w |
+                 ||     ||
+    """
+    
+    # Create a box around the message
+    messages = [messagespace0, message1, messagespace1, message2, message3, message4, message5, message6, message7, message8, message9, message10, message11, message12, message13, message14, message15, message16, message17, messagespace2]
+    max_length = max(len(line) for line in messages)
+    border = '*' * (max_length + 4)
+
+    print(border)
+    for line in messages:
+        print(f"* {line:<{max_length}} *")
+    print(border)
+
+    print(cow_art)
+
+# ---------------------------------------cowsay exit message----------------------------------------
+
+def exitcowsay(exitmessagespace1, exitmessage1, exitmessagespace2):
+    # Create the cow ASCII art
+    exitcow_art = r"""
+         \   ^__^
+          \  (oo)\_______
+             (__)\       )\/\
+                 ||----w |
+                 ||     ||
+    """
+    
+    # Create a box around the message
+    exitmessages = [exitmessagespace1, exitmessage1, exitmessagespace2]
+    max_length = max(len(line) for line in exitmessages)
+    exitborder = '*' * (max_length + 4)
+    
+    print(exitborder)
+    for line in exitmessages:
+        print(f"* {line:<{max_length}} *")
+    print(exitborder)
+    
+    print(exitcow_art)
+
+# ---------------------------------------menus----------------------------------------
 
 def show_menu():
     terminal_width = os.get_terminal_size().columns
@@ -124,49 +178,7 @@ def start_Socat_listener():
     except FileNotFoundError:
         print("socat is not installed. Please install socat and try again.")
 
-def cowsay(messagespace0, message1, messagespace1, message2, message3, message4, message5, message6, message7, message8, message9, message10, message11, message12, message13, message14, message15, message16, message17, messagespace2):
-    # Create the cow ASCII art
-    cow_art = r"""
-         \   ^__^
-          \  (oo)\_______
-             (__)\       )\/\
-                 ||----w |
-                 ||     ||
-    """
-    
-    # Create a box around the message
-    messages = [messagespace0, message1, messagespace1, message2, message3, message4, message5, message6, message7, message8, message9, message10, message11, message12, message13, message14, message15, message16, message17, messagespace2]
-    max_length = max(len(line) for line in messages)
-    border = '*' * (max_length + 4)
-
-    print(border)
-    for line in messages:
-        print(f"* {line:<{max_length}} *")
-    print(border)
-
-    print(cow_art)
-
-def exitcowsay(exitmessagespace1, exitmessage1, exitmessagespace2):
-    # Create the cow ASCII art
-    exitcow_art = r"""
-         \   ^__^
-          \  (oo)\_______
-             (__)\       )\/\
-                 ||----w |
-                 ||     ||
-    """
-    
-    # Create a box around the message
-    exitmessages = [exitmessagespace1, exitmessage1, exitmessagespace2]
-    max_length = max(len(line) for line in exitmessages)
-    exitborder = '*' * (max_length + 4)
-    
-    print(exitborder)
-    for line in exitmessages:
-        print(f"* {line:<{max_length}} *")
-    print(exitborder)
-    
-    print(exitcow_art)
+# ---------------------------------------Main Functions----------------------------------------
 
 def main():
     print_fade_banner()  # Show fade banner on startup
