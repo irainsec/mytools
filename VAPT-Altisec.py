@@ -124,7 +124,7 @@ def start_Socat_listener():
     except FileNotFoundError:
         print("socat is not installed. Please install socat and try again.")
 
-def cowsay(message1, messagespace1, message2, message3, message4, message5, message6, message7, message8, message9, message10, message11, message12, message13, message14, message15, message16, message17, messagespace2):
+def cowsay(messagespace0, message1, messagespace1, message2, message3, message4, message5, message6, message7, message8, message9, message10, message11, message12, message13, message14, message15, message16, message17, messagespace2):
     # Create the cow ASCII art
     cow_art = r"""
          \   ^__^
@@ -135,16 +135,38 @@ def cowsay(message1, messagespace1, message2, message3, message4, message5, mess
     """
     
     # Create a box around the message
-    messages = [message1, messagespace1, message2, message3, message4, message5, message6, message7, message8, message9, message10, message11, message12, message13, message14, message15, message16, message17, messagespace2]
+    messages = [messagespace0, message1, messagespace1, message2, message3, message4, message5, message6, message7, message8, message9, message10, message11, message12, message13, message14, message15, message16, message17, messagespace2]
     max_length = max(len(line) for line in messages)
     border = '*' * (max_length + 4)
-    
+
     print(border)
     for line in messages:
         print(f"* {line:<{max_length}} *")
     print(border)
-    
+
     print(cow_art)
+
+def exitcowsay(exitmessagespace1, exitmessage1, exitmessagespace2):
+    # Create the cow ASCII art
+    exitcow_art = r"""
+         \   ^__^
+          \  (oo)\_______
+             (__)\       )\/\
+                 ||----w |
+                 ||     ||
+    """
+    
+    # Create a box around the message
+    exitmessages = [exitmessagespace1, exitmessage1, exitmessagespace2]
+    max_length = max(len(line) for line in exitmessages)
+    exitborder = '*' * (max_length + 4)
+    
+    print(exitborder)
+    for line in exitmessages:
+        print(f"* {line:<{max_length}} *")
+    print(exitborder)
+    
+    print(exitcow_art)
 
 def main():
     print_fade_banner()  # Show fade banner on startup
@@ -158,14 +180,16 @@ def main():
         elif choice == '2':
             start_Socat_listener()
         elif choice == '3':
-            message1 = ("Exiting.................")
-            messagespace1 = ("")
+            exitmessagespace1 = ("")
+            exitmessage1 = ("                                  .....EXITING.....                                    ")
+            exitmessagespace2 = ("")
             print()
-            cowsay(message1, messagespace1)
+            exitcowsay(exitmessagespace1, exitmessage1, exitmessagespace2)
             print()
             break
         else:
-            message1 = ("________________Are you dumb bruh? Can't you see the available option?________________")
+            messagespace0 = ("")          
+            message1 = ("                Are you dumb bruh? Can't you see the available option?                ")
             messagespace1 = ("")
             message2 = ("  NNNNNNNN        NNNNNNNN     OOOOOOOOO          OOOOOOOOO     BBBBBBBBBBBBBBBBB     ")
             message3 = ("  N:::::::N       N::::::N   OO:::::::::OO      OO:::::::::OO   B::::::::::::::::B    ")
@@ -185,7 +209,7 @@ def main():
             message17 = ("  NNNNNNNN         NNNNNNN     OOOOOOOOO          OOOOOOOOO     BBBBBBBBBBBBBBBBB     ")
             messagespace2 = ("")
             print()
-            cowsay(message1, messagespace1, message2, message3, message4, message5, message6, message7, message8, message9, message10, message11, message12, message13, message14, message15, message16, message17, messagespace2)
+            cowsay(messagespace0, message1, messagespace1, message2, message3, message4, message5, message6, message7, message8, message9, message10, message11, message12, message13, message14, message15, message16, message17, messagespace2)
 
         input("Press Enter to continue...""\n")
         print_fade_banner()
