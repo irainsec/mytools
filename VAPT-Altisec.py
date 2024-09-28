@@ -212,7 +212,7 @@ def make_exploits_menu():
 def listener_exploits_menu():
     print_centered("Listener Exploits Menu")
     print()
-    print_shifted_left("[1] Meterpreter Listener for .exe Exploits")
+    print_shifted_left("[1] Meterpreter Listener for [ .exe | .hta ] Exploits")
     print_shifted_left("[2] Socat Listener for .BAT Exploits")
     print_shifted_left("[3] Go Back")
     print()
